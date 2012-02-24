@@ -3,6 +3,7 @@
   xmlns:browser="http://namespaces.zope.org/browser"
   i18n_domain="groupserver">
   
+  <!--The Site Memberships content provider-->  
   <interface 
     interface=".interfaces.IGSSiteMembershipsContentProvider"
     type="zope.contentprovider.interfaces.ITALNamespaceData"/> 
@@ -10,13 +11,6 @@
       provides="zope.contentprovider.interfaces.IContentProvider"
       factory=".sitememberships.SiteMembershipsContentProvider"
       name="groupserver.SiteMemberships" />
-      
- <browser:page 
-    for="Products.CustomUserFolder.interfaces.ICustomUser"
-    name="sites.html"
-    class="Products.GSContent.view.GSContentView"
-    template="browser/templates/sites.pt"
-    permission="zope2.ManageProperties" />
 
 </configure>
 
