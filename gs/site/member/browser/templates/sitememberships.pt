@@ -1,0 +1,14 @@
+<div id="siteMembership" 
+  tal:condition="python:len(options['siteMemberships'])&gt;1">
+  <h2>Site Memberships</h2>
+  <ul>
+    <tal:block repeat="site options/siteMemberships">
+      <li tal:define="current python:options['currentSite'].id==site.token;"
+        tal:attributes="class python:current and 'current' or 'not-current'">
+        <a href="#" tal:content="site/value/name"
+          tal:omit-tag="current"
+          tal:attributes="href site/value/url">A site</a>
+      </li>
+    </tal:block>
+  </ul>
+</div><!--siteMemberships-->
