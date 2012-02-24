@@ -12,5 +12,21 @@
       factory=".sitememberships.SiteMembershipsContentProvider"
       name="groupserver.SiteMemberships" />
 
+  <!-- The subscribers to the *group* join and leave events. -->
+  <subscriber
+     for="Products.CustomUserFolder.interfaces.ICustomUser
+          gs.group.member.join.event.IGSJoinGroupEvent"
+     handler=".usergroupadd.member_added" />
+  <subscriber
+     for="Products.XWFChat.interfaces.IGSGroupFolder
+          gs.group.member.leave.event.IGSLeaveGroupEvent"
+     handler=".usergroupleave.member_removed" />
+
+  <!-- The utility so the events are shown on the event-log. -->
+  <utility 
+    factory=".audit.AuditEventFactory"
+    name="gs.site.member"
+    permission="zope.Public" />
+
 </configure>
 
