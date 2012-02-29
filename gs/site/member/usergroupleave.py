@@ -4,6 +4,10 @@ from gs.group.member.base.utils import user_member_of_site
 from gs.groups.interfaces import IGSGroupsInfo
 from audit import SiteMemberAuditor, LEAVE_SITE, LEAVE_SITE_MEMBER
 
+SUBSYSTEM = 'gs.site.member'
+import logging
+log = logging.getLogger(SUBSYSTEM) #@UndefinedVariable
+
 def member_removed(context, event):
     groups = context
     groupInfo = event.groupInfo
@@ -18,8 +22,16 @@ def member_removed(context, event):
         acl_users = getattr(site_root, 'acl_users')
         assert acl_users, 'ACL Users not found in site_root'
         memberGroupId = member_id(siteInfo.id)
-        acl_users.delGroupsFromUser([memberGroupId], userInfo.id)
-        auditor.info(LEAVE_SITE)
+        try:
+            acl_users.delGroupsFromUser([memberGroupId], userInfo.id)
+        except ValueError, ve:
+            m = u'Tried to remove %s (%s) from the site %s (%s) but '\
+                u'got a ValueError:\n%s' %\
+                (userInfo.name, userInfo.id, siteInfo.name, memberGroupId,
+                    ve)
+            log.warning(m.encode('ascii', 'ignore'))
+        else:
+            auditor.info(LEAVE_SITE)
         assert not(user_member_of_site(userInfo, siteInfo.siteObj))
 
 def user_member_of_group_on_site(context, userInfo):
