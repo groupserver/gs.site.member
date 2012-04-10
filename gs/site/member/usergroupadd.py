@@ -1,7 +1,9 @@
 # coding=utf-8
+from zope.event import notify
 from Products.GSGroupMember.groupmembership import member_id
 from gs.group.member.base.utils import user_member_of_site
 from audit import SiteMemberAuditor, JOIN_SITE, JOIN_SITE_MEMBER
+from event import GSJoinSiteEvent
 
 def member_added(context, event):
     groupInfo = event.groupInfo
@@ -23,5 +25,6 @@ def member_added(context, event):
             '%s not in %s' % (memberGroupId, groupNames)
         acl_users.addGroupsToUser([memberGroupId], userInfo.id)
         auditor.info(JOIN_SITE)
+        notify(GSJoinSiteEvent(context, siteInfo, userInfo))
     assert user_member_of_site(userInfo, siteInfo.siteObj)
 

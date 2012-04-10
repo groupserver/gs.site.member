@@ -1,8 +1,10 @@
 # coding=utf-8
+from zope.event import notify
 from Products.GSGroupMember.groupmembership import member_id
 from gs.group.member.base.utils import user_member_of_site
 from gs.groups.interfaces import IGSGroupsInfo
 from audit import SiteMemberAuditor, LEAVE_SITE, LEAVE_SITE_MEMBER
+from event import GSLeaveSiteEvent
 
 SUBSYSTEM = 'gs.site.member'
 import logging
@@ -32,6 +34,7 @@ def member_removed(context, event):
             log.warning(m.encode('ascii', 'ignore'))
         else:
             auditor.info(LEAVE_SITE)
+            notify(GSLeaveSiteEvent(context, siteInfo, userInfo))
         assert not(user_member_of_site(userInfo, siteInfo.siteObj))
 
 def user_member_of_group_on_site(context, userInfo):
