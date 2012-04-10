@@ -17,7 +17,7 @@ class GSJoinSiteEvent(ObjectEvent):
     
     def __init__(self, context, siteInfo, memberInfo):
         ObjectEvent.__init__(self, context)
-        self.siteInfo   = groupInfo
+        self.siteInfo   = siteInfo
         self.memberInfo = memberInfo
 
 class GSLeaveSiteEvent(ObjectEvent):
@@ -25,6 +25,6 @@ class GSLeaveSiteEvent(ObjectEvent):
     
     def __init__(self, context, siteInfo, memberInfo):
         ObjectEvent.__init__(self, context)
-        self.siteInfo   = groupInfo
+        self.siteInfo   = siteInfo
         self.memberInfo = memberInfo
 
