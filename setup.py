@@ -32,6 +32,13 @@ setup(name='gs.site.member',
     zip_safe=True,
     install_requires=[
         'setuptools',
+        'gs.group.member.base',
+        'gs.group.member.join',
+        'gs.group.member.leave',
+        'gs.groups',
+        'Products.CustomUserFolder',
+        'Products.GSAuditTrail',
+        'Products.GSGroupMember',
         # -*- Extra requirements: -*-
     ],
     entry_points="""
