@@ -158,8 +158,7 @@ class SiteMemberAuditor(object):
         self.userInfo = userInfo
         self.siteInfo = siteInfo
 
-        da = context.zsqlalchemy
-        self.queries = AuditQuery(da)
+        self.queries = AuditQuery()
         self.factory = AuditEventFactory()
         
     def info(self, code):
