@@ -5,8 +5,9 @@ from zope.component import createObject
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.interfaces import IVocabulary, \
   IVocabularyTokenized, ITitledTokenizedTerm
-from zope.interface.common.mapping import IEnumerableMapping 
+from zope.interface.common.mapping import IEnumerableMapping
 from gs.group.member.base.utils import member_id
+
 
 class SiteMembers(object):
     implements(IVocabulary, IVocabularyTokenized)
@@ -14,34 +15,35 @@ class SiteMembers(object):
 
     def __init__(self, context):
         self.context = context
-    
+        assert self.context, 'There is no context.'
+
     @Lazy
     def siteInfo(self):
         retval = createObject('groupserver.SiteInfo', self.context)
         return retval
-    
+
     @Lazy
     def groupsInfo(self):
         retval = createObject('groupserver.GroupsInfo', self.context)
         return retval
-    
+
     def __iter__(self):
         """See zope.schema.interfaces.IIterableVocabulary"""
-        retval = [SimpleTerm(m.id, m.id, m.name)
-                  for m in self.members]
-        for term in retval:
-            assert term
-            assert ITitledTokenizedTerm in providedBy(term)
-            assert term.token == term.value
-        return iter(retval)
+        for uid in self.memberIds:
+            m = createObject('groupserver.UserFromId', self.context, uid)
+            retval = SimpleTerm(m.id, m.id, m.name)
+            assert ITitledTokenizedTerm in providedBy(retval)
+            assert retval.token == retval.value
+            assert retval.token == uid
+            yield retval
 
     def __len__(self):
         """See zope.schema.interfaces.IIterableVocabulary"""
-        return len(self.groups)
+        return len(self.memberIds)
 
     def __contains__(self, value):
         """See zope.schema.interfaces.IBaseVocabulary"""
-        retval = value in [m.id for m in self.members]
+        retval = value in self.memberIds
         assert type(retval) == bool
         return retval
 
@@ -52,18 +54,19 @@ class SiteMembers(object):
     def getTerm(self, value):
         """See zope.schema.interfaces.IBaseVocabulary"""
         return self.getTermByToken(value)
-        
+
     def getTermByToken(self, token):
         """See zope.schema.interfaces.IVocabularyTokenized"""
-        for m in self.members:
-            if m.id == token:
-                retval = SimpleTerm(m.id, m.id, m.name)
-                assert retval
-                assert ITitledTokenizedTerm in providedBy(retval)
-                assert retval.token == retval.value
-                return retval
-        raise LookupError, token
-        
+        if token in self:
+            m = createObject('groupserver.UserFromId', self.context, token)
+            retval = SimpleTerm(m.id, m.id, m.name)
+        else:
+            raise LookupError(token)
+        assert ITitledTokenizedTerm in providedBy(retval)
+        assert retval.token == retval.value
+        assert retval.token == token
+        return retval
+
     @Lazy
     def acl_users(self):
         sr = self.context.site_root()
@@ -71,26 +74,22 @@ class SiteMembers(object):
         retval = sr.acl_users
         assert retval, 'No ACL Users'
         return retval
-  
-    def get_site_member_group_user_ids(self):
+
+    @Lazy
+    def memberIds(self):
         smg = self.acl_users.getGroupById(member_id(self.siteInfo.id))
         assert smg, u'Could not get site-member group for %s (%s)' % \
-          (self.siteInfo.name, self.siteInfo.id)
-  
-        retval = [uid for uid in smg.getUsers() 
-                    if self.acl_users.getUser(uid)]
-        assert type(retval) == list
-        types = [type(u) == str for u in retval]
-        assert reduce(lambda a, b: a and b, types, True), \
-          u'Not all strings returned'
-        return retval
-        
-    @Lazy
-    def members(self):
-        assert self.context
-        siteMemberGroupIds = self.get_site_member_group_user_ids()
-        retval = [createObject('groupserver.UserFromId', self.context, uid)
-                   for uid in siteMemberGroupIds]
+            (self.siteInfo.name, self.siteInfo.id)
+        retval = list(smg.getUsers())
         assert type(retval) == list
         return retval
 
+    @Lazy
+    def members(self):
+        assert self.context
+        retval = [createObject('groupserver.UserFromId', self.context, uid)
+                   for uid in self.memberIds if uid]
+        retval = [u for u in retval
+                    if not(u.anonymous)]
+        assert type(retval) == list
+        return retval
