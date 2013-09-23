@@ -51,7 +51,7 @@ setup(name='gs.site.member',
         'zope.contentprovider',
         'zope.event',
         'zope.interface',
-        'zope.pagetemplate'
+        'zope.pagetemplate',
         'zope.publisher',
         'zope.schema',
         'Zope2',
