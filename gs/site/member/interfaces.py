@@ -1,13 +1,25 @@
-# coding=utf-8
-from zope.interface import Attribute
-from zope.schema import *
+# -*- coding: utf-8 -*-
+##############################################################################
+#
+# Copyright © 2013 OnlineGroups.net and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+from zope.schema import Text
 from zope.contentprovider.interfaces import IContentProvider
+
 
 class IGSSiteMembershipsContentProvider(IContentProvider):
     """The ABEL Profile Properties Content Provider"""
     pageTemplateFileName = Text(title=u"Page Template File Name",
-      description=u'The name of the ZPT file that is used to '\
-        u'render the information',
+      description=u'The name of the ZPT file that is used to render the '
+        u'information',
       required=False,
       default=u"browser/templates/sitememberships.pt")
-

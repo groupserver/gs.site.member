@@ -1,2 +1,3 @@
-# coding=utf-8
-from sitemember import SiteMembers  # lint:ok
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from .sitemember import SiteMembers  # lint:ok

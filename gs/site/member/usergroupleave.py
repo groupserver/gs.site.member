@@ -1,22 +1,35 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
+##############################################################################
+#
+# Copyright © 2013 OnlineGroups.net and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+from __future__ import absolute_import
 from zope.event import notify
 from Products.GSGroupMember.groupmembership import member_id
 from gs.group.member.base.utils import user_member_of_site
 from gs.groups.interfaces import IGSGroupsInfo
-from audit import SiteMemberAuditor, LEAVE_SITE, LEAVE_SITE_MEMBER
-from event import GSLeaveSiteEvent
-
+from .audit import SiteMemberAuditor, LEAVE_SITE, LEAVE_SITE_MEMBER
+from .event import GSLeaveSiteEvent
 SUBSYSTEM = 'gs.site.member'
 import logging
-log = logging.getLogger(SUBSYSTEM) #@UndefinedVariable
+log = logging.getLogger(SUBSYSTEM)
+
 
 def member_removed(context, event):
-    groups = context
     groupInfo = event.groupInfo
     userInfo = event.memberInfo
     siteInfo = groupInfo.siteInfo
     auditor = SiteMemberAuditor(context, userInfo, siteInfo)
-    
+
     if user_member_of_group_on_site(context, userInfo):
         auditor.info(LEAVE_SITE_MEMBER)
     else:
@@ -37,10 +50,10 @@ def member_removed(context, event):
             notify(GSLeaveSiteEvent(context, siteInfo, userInfo))
         assert not(user_member_of_site(userInfo, siteInfo.siteObj))
 
+
 def user_member_of_group_on_site(context, userInfo):
     groupsInfo = IGSGroupsInfo(context)
     u = userInfo.user
     groups = groupsInfo.get_member_groups_for_user(u, u)
     retval = bool(groups)
     return retval
-
