@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-# Copyright © 2013 OnlineGroups.net and Contributors.
+# Copyright © 2013, 2014 OnlineGroups.net and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -12,7 +12,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-from __future__ import absolute_import
+from __future__ import absolute_import, unicode_literals
 from zope.event import notify
 from Products.GSGroupMember.groupmembership import member_id
 from gs.group.member.base.utils import user_member_of_site
@@ -31,13 +31,15 @@ def member_added(context, event):
     else:
         site_root = context.site_root()
         acl_users = getattr(site_root, 'acl_users')
-        assert acl_users, 'ACL Users not found in site_root'
+        if not acl_users:
+            raise ValueError('ACL Users not found in site_root')
 
         groupNames = acl_users.getGroupNames()
         siteInfo = groupInfo.siteInfo
         memberGroupId = member_id(siteInfo.id)
-        assert memberGroupId in groupNames, \
-            '%s not in %s' % (memberGroupId, groupNames)
+        if memberGroupId not in groupNames:
+            m = '%s not in %s' % (memberGroupId, groupNames)
+            raise ValueError(m)
         acl_users.addGroupsToUser([memberGroupId], userInfo.id)
         auditor.info(JOIN_SITE)
         notify(GSJoinSiteEvent(context, siteInfo, userInfo))

@@ -1,4 +1,21 @@
 # -*- coding: utf-8 -*-
+##############################################################################
+#
+# Copyright © 2012, 2013, 2014 OnlineGroups.net and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+from __future__ import unicode_literals
+SUBSYSTEM = 'gs.site.member'
+from logging import getLogger
+log = getLogger(SUBSYSTEM)
 from pytz import UTC
 from datetime import datetime
 from zope.component.interfaces import IFactory
@@ -6,9 +23,7 @@ from zope.interface import implements, implementedBy
 from Products.GSAuditTrail import IAuditEvent, BasicAuditEvent, \
     AuditQuery, event_id_from_data
 from Products.XWFCore.XWFUtils import munge_date
-SUBSYSTEM = 'gs.site.member'
-import logging
-log = logging.getLogger(SUBSYSTEM)
+from gs.core import to_ascii
 UNKNOWN = '0'
 JOIN_SITE = '1'
 JOIN_SITE_MEMBER = '2'
@@ -19,9 +34,9 @@ LEAVE_SITE_MEMBER = '4'
 class AuditEventFactory(object):
     implements(IFactory)
 
-    title = u'Site Member Audit-Event Factory'
-    description = u'Creates a GroupServer audit event for changing the ' \
-        u'site membership.'
+    title = 'Site Member Audit-Event Factory'
+    description = 'Creates a GroupServer audit event for changing the ' \
+        'site membership.'
 
     def __call__(self, context, event_id, code, date,
         userInfo, instanceUserInfo, siteInfo, groupInfo=None,
@@ -57,19 +72,22 @@ class JoinEvent(BasicAuditEvent):  # JOIN_SITE = '1'
         BasicAuditEvent.__init__(self, context, id, JOIN_SITE, d,
             userInfo, userInfo, siteInfo, None, None, None, SUBSYSTEM)
 
-    def __str__(self):
-        retval = u'%s (%s) joined the site "%s" (%s).' % \
+    def __unicode__(self):
+        retval = '%s (%s) joined the site "%s" (%s).' % \
             (self.userInfo.name, self.userInfo.id,
              self.siteInfo.name, self.siteInfo.id)
-        retval = retval.encode('ascii', 'ignore')
+        return retval
+
+    def __str__(self):
+        retval = to_ascii(unicode(self))
         return retval
 
     @property
     def xhtml(self):
-        cssClass = u'audit-event gs-site-member-%s' % self.code
-        retval = u'<span class="%s">Joined the site <cite>%s</cite>.' %\
+        cssClass = 'audit-event gs-site-member-%s' % self.code
+        retval = '<span class="%s">Joined the site <cite>%s</cite>.' %\
                     (cssClass, self.siteInfo.name)
-        retval = u'%s (%s)' % \
+        retval = '%s (%s)' % \
             (retval, munge_date(self.context, self.date))
         return retval
 
@@ -83,21 +101,24 @@ class JoinMemberEvent(BasicAuditEvent):
         BasicAuditEvent.__init__(self, context, id, JOIN_SITE_MEMBER, d,
             userInfo, userInfo, siteInfo, None, None, None, SUBSYSTEM)
 
-    def __str__(self):
-        retval = u'%s (%s) did not join the site "%s" (%s), as the '\
-            u'member is already a member of the site!' % \
+    def __unicode__(self):
+        retval = '%s (%s) did not join the site "%s" (%s), as the '\
+            'member is already a member of the site!' % \
             (self.userInfo.name, self.userInfo.id,
              self.siteInfo.name, self.siteInfo.id)
-        retval = retval.encode('ascii', 'ignore')
+        return retval
+
+    def __str__(self):
+        retval = to_ascii(unicode(self))
         return retval
 
     @property
     def xhtml(self):
-        cssClass = u'audit-event gs-site-member-%s' % self.code
-        retval = u'<span class="%s">Already a member of the site '\
-                    u'<cite>%s</cite>.' %\
+        cssClass = 'audit-event gs-site-member-%s' % self.code
+        retval = '<span class="%s">Already a member of the site '\
+                    '<cite>%s</cite>.' %\
                     (cssClass, self.siteInfo.name)
-        retval = u'%s (%s)' % \
+        retval = '%s (%s)' % \
             (retval, munge_date(self.context, self.date))
         return retval
 
@@ -110,19 +131,22 @@ class LeaveEvent(BasicAuditEvent):  # LEAVE_SITE = '3'
         BasicAuditEvent.__init__(self, context, id, LEAVE_SITE, d,
             userInfo, userInfo, siteInfo, None, None, None, SUBSYSTEM)
 
-    def __str__(self):
-        retval = u'%s (%s) left the site "%s" (%s).' % \
+    def __unicode__(self):
+        retval = '%s (%s) left the site "%s" (%s).' % \
             (self.userInfo.name, self.userInfo.id,
              self.siteInfo.name, self.siteInfo.id)
-        retval = retval.encode('ascii', 'ignore')
+        return retval
+
+    def __str__(self):
+        retval = to_ascii(unicode(self))
         return retval
 
     @property
     def xhtml(self):
-        cssClass = u'audit-event gs-site-member-%s' % self.code
-        retval = u'<span class="%s">Left the site <cite>%s</cite>.' %\
+        cssClass = 'audit-event gs-site-member-%s' % self.code
+        retval = '<span class="%s">Left the site <cite>%s</cite>.' %\
                     (cssClass, self.siteInfo.name)
-        retval = u'%s (%s)' % \
+        retval = '%s (%s)' % \
             (retval, munge_date(self.context, self.date))
         return retval
 
@@ -135,20 +159,23 @@ class LeaveMemberEvent(BasicAuditEvent):  # LEAVE_SITE_MEMBER = '4'
         BasicAuditEvent.__init__(self, context, id, LEAVE_SITE_MEMBER, d,
             userInfo, userInfo, siteInfo, None, None, None, SUBSYSTEM)
 
-    def __str__(self):
-        retval = u'%s (%s) did not leave the site "%s" (%s), as the '\
-            u'member still belongs to a group on this site.' % \
+    def __unicode__(self):
+        retval = '%s (%s) did not leave the site "%s" (%s), as the '\
+            'member still belongs to a group on this site.' % \
             (self.userInfo.name, self.userInfo.id,
              self.siteInfo.name, self.siteInfo.id)
-        retval = retval.encode('ascii', 'ignore')
+        return retval
+
+    def __str__(self):
+        retval = to_ascii(unicode(self))
         return retval
 
     @property
     def xhtml(self):
-        cssClass = u'audit-event gs-site-member-%s' % self.code
-        retval = u'<span class="%s">Still a member of the site '\
-            u'<cite>%s</cite>.' % (cssClass, self.siteInfo.name)
-        retval = u'%s (%s)' % \
+        cssClass = 'audit-event gs-site-member-%s' % self.code
+        retval = '<span class="%s">Still a member of the site '\
+            '<cite>%s</cite>.' % (cssClass, self.siteInfo.name)
+        retval = '%s (%s)' % \
             (retval, munge_date(self.context, self.date))
         return retval
 

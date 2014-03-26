@@ -12,14 +12,15 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from __future__ import unicode_literals
 from zope.schema import Text
 from zope.contentprovider.interfaces import IContentProvider
 
 
 class IGSSiteMembershipsContentProvider(IContentProvider):
-    """The ABEL Profile Properties Content Provider"""
-    pageTemplateFileName = Text(title=u"Page Template File Name",
-      description=u'The name of the ZPT file that is used to render the '
-        u'information',
+    """The site memberships content provider"""
+    pageTemplateFileName = Text(title="Page Template File Name",
+      description='The name of the ZPT file that is used to render the '
+        'information',
       required=False,
-      default=u"browser/templates/sitememberships.pt")
+      default="browser/templates/sitememberships.pt")

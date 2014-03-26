@@ -12,6 +12,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from __future__ import unicode_literals
 from zope.cachedescriptors.property import Lazy
 from zope.interface import implements, providedBy
 from zope.component import createObject
@@ -27,8 +28,9 @@ class SiteMembers(object):
     __used_for__ = IEnumerableMapping
 
     def __init__(self, context):
+        if not(context):
+            raise ValueError('There is no context')
         self.context = context
-        assert self.context, 'There is no context.'
 
     @Lazy
     def siteInfo(self):
@@ -91,8 +93,10 @@ class SiteMembers(object):
     @Lazy
     def memberIds(self):
         smg = self.acl_users.getGroupById(member_id(self.siteInfo.id))
-        assert smg, u'Could not get site-member group for %s (%s)' % \
-            (self.siteInfo.name, self.siteInfo.id)
+        if not smg:
+            m = 'Could not get site-member group for %s (%s)'
+            msg = m % (self.siteInfo.name, self.siteInfo.id)
+            raise ValueError(msg)
         retval = list(smg.getUsers())
         assert type(retval) == list
         return retval
