@@ -1,4 +1,4 @@
-<div id="siteMembership" 
+<div id="siteMembership"
   tal:condition="python:len(options['siteMemberships'])&gt;1">
   <h2>Site Memberships</h2>
   <ul>
