@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-# Copyright © 2013 OnlineGroups.net and Contributors.
+# Copyright © 2013, 2014 OnlineGroups.net and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -42,7 +42,7 @@ setup(name='gs.site.member',
     packages=find_packages(exclude=['ez_setup']),
     namespace_packages=['gs', 'gs.site', ],
     include_package_data=True,
-    zip_safe=True,
+    zip_safe=False,
     install_requires=[
         'setuptools',
         'pytz',
@@ -54,7 +54,11 @@ setup(name='gs.site.member',
         'zope.pagetemplate',
         'zope.publisher',
         'zope.schema',
+        'zope.tal',
+        'zope.tales',
         'Zope2',
+        'gs.core',
+        'gs.group.base',
         'gs.group.member.base',
         'gs.group.member.join',
         'gs.group.member.leave',
@@ -62,6 +66,7 @@ setup(name='gs.site.member',
         'Products.CustomUserFolder',
         'Products.GSAuditTrail',
         'Products.GSGroupMember',
+        'Products.XWFCore',
     ],
     entry_points="""
     # -*- Entry points: -*-
