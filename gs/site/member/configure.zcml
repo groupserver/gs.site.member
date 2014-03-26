@@ -34,7 +34,7 @@
           gs.group.member.join.event.IGSJoinGroupEvent"
      handler=".usergroupadd.member_added" />
   <subscriber
-     for="Products.XWFChat.interfaces.IGSGroupFolder
+     for="gs.group.base.interfaces.IGSGroupMarker
           gs.group.member.leave.event.IGSLeaveGroupEvent"
      handler=".usergroupleave.member_removed" />
 
