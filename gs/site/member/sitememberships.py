@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+############################################################################
 #
 # Copyright © 2013, 2014 OnlineGroups.net and Contributors.
 # All Rights Reserved.
@@ -11,7 +11,7 @@
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
-##############################################################################
+############################################################################
 from __future__ import absolute_import, unicode_literals
 from zope.interface import implements, Interface
 from zope.contentprovider.interfaces import UpdateNotCalled
@@ -39,7 +39,7 @@ class SiteMembershipsContentProvider(object):
         self.__updated = True
 
         self.currentSite = createObject('groupserver.SiteInfo',
-          self.context)
+                                        self.context)
         self.userInfo = IGSUserInfo(self.context)
         self.siteMemberships = SiteMembership(self.context)
 
