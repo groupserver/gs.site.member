@@ -35,8 +35,6 @@ class SiteMembership(object):
         """See zope.schema.interfaces.IIterableVocabulary"""
         for siteId in self.siteIds:
             retval = self.get_site_term(siteId)
-            print siteId
-            print retval.value.name
             yield retval
 
     def __len__(self):
