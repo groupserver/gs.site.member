@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# Copyright © 2013, 2014 OnlineGroups.net and Contributors.
+# Copyright © 2012, 2013, 2014 OnlineGroups.net and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -43,7 +43,7 @@ setup(name='gs.site.member',
       keywords='site groupserver member statistics join leave',
       author='Michael JasonSmith',
       author_email='mpj17@onlinegroups.net',
-      url='https://source.iopen.net/groupserver/gs.site.member/',
+      url='https://github.com/groupserver/gs.site.member/',
       license='ZPL 2.1',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['gs', 'gs.site', ],
