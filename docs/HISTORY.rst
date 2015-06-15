@@ -1,12 +1,20 @@
 Changelog
 =========
 
+2.5.0 (2015-06-15)
+------------------
+
+* Following `gs.group.member.leave`_ to its new home
+
+.. _GitHub: https://github.com/groupserver/gs.site.member
+
 2.4.0 (2014-10-10)
 ------------------
 
-* Pointing at GitHub as the primary code repository, and naming
-  the reStructuredText files as such
-*
+* Pointing at GitHub_ as the primary code repository
+* Naming the reStructuredText files as such
+
+.. _GitHub: https://github.com/groupserver/gs.site.member
 
 2.3.3 (2014-09-04)
 ------------------
