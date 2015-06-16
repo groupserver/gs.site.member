@@ -11,7 +11,7 @@
 <!-- WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND -->
 <!-- FITNESS FOR A PARTICULAR PURPOSE. -->
 <configure xmlns="http://namespaces.zope.org/zope"
-           i18n_domain="groupserver">
+           i18n_domain="gs.site.member.base">
 
   <!-- The Site Member Vocabulary-->
   <utility
