@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-# Copyright © 2013 OnlineGroups.net and Contributors.
+# Copyright © 2013, 2015 OnlineGroups.net and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -18,7 +18,7 @@ from zope.interface import implements, providedBy
 from zope.component import createObject
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.interfaces import IVocabulary, \
-  IVocabularyTokenized, ITitledTokenizedTerm
+    IVocabularyTokenized, ITitledTokenizedTerm
 from zope.interface.common.mapping import IEnumerableMapping
 from gs.group.member.base.utils import member_id
 
@@ -105,8 +105,7 @@ class SiteMembers(object):
     def members(self):
         assert self.context
         retval = [createObject('groupserver.UserFromId', self.context, uid)
-                   for uid in self.memberIds if uid]
-        retval = [u for u in retval
-                    if not(u.anonymous)]
+                  for uid in self.memberIds if uid]
+        retval = [u for u in retval if not(u.anonymous)]
         assert type(retval) == list
         return retval
