@@ -1,6 +1,11 @@
 Changelog
 =========
 
+3.0.0 (2015-06-xx)
+------------------
+
+* Renaming the product ``gs.site.member.base``
+
 2.5.0 (2015-06-15)
 ------------------
 
@@ -14,7 +19,7 @@ Changelog
 * Pointing at GitHub_ as the primary code repository
 * Naming the reStructuredText files as such
 
-.. _GitHub: https://github.com/groupserver/gs.site.member
+.. _GitHub: https://github.com/groupserver/gs.site.member.base
 
 2.3.3 (2014-09-04)
 ------------------

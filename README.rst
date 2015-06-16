@@ -1,13 +1,13 @@
-==================
-``gs.site.member``
-==================
+=======================
+``gs.site.member.base``
+=======================
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Site-membership management for GroupServer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :Author: `Michael JasonSmith`_
 :Contact: Michael JasonSmith <mpj17@onlinegroups.net>
-:Date: 2014-10-10
+:Date: 2015-16-16
 :Organization: `GroupServer.org`_
 :Copyright: This document is licensed under a
   `Creative Commons Attribution-Share Alike 4.0 International License`_
@@ -31,14 +31,14 @@ new group-member to the site-member user-group if (and only if)
 he or she is not already a member of the site-member
 user-group. When there is a new site member this product *in
 turn* raises an event with the interface
-``gs.site.member.event.IGSJoinSiteEvent``.
+``gs.site.member.base.event.IGSJoinSiteEvent``.
 
 Conversely, when someone leaves a group [#LeaveEvent]_ this
 product catches the event and checks if the person is still a
 member of a group on this site. If the person is no longer a
 member of any group then he or she is removed from the
 site-member user-group and this product raises a
-``gs.site.member.event.IGSLeaveSiteEvent``.
+``gs.site.member.base.event.IGSLeaveSiteEvent``.
 
 Site Member Vocabulary
 ======================
@@ -58,8 +58,10 @@ people to change between sites easily.
 Resources
 =========
 
-- Code repository: https://github.com/groupserver/gs.site.member
-- Questions and comments to http://groupserver.org/groups/development
+- Code repository:
+  https://github.com/groupserver/gs.site.member.base
+- Questions and comments to
+  http://groupserver.org/groups/development
 - Report bugs at https://redmine.iopen.net/projects/groupserver
 
 .. _GroupServer: http://groupserver.org/
