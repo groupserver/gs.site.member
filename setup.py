@@ -17,7 +17,7 @@ import os
 from setuptools import setup, find_packages
 from version import get_version
 
-name = 'gs.site.member'
+name = 'gs.site.member.base'
 version = get_version()
 
 with codecs.open('README.rst', encoding='utf-8') as f:
@@ -44,7 +44,7 @@ setup(name=name,
       keywords='site groupserver member statistics join leave',
       author='Michael JasonSmith',
       author_email='mpj17@onlinegroups.net',
-      url='https://github.com/groupserver/gs.site.member/',
+      url='https://github.com/groupserver/{0}'.format(name),
       license='ZPL 2.1',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['.'.join(name.split('.')[:i])
