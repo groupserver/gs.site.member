@@ -20,6 +20,10 @@ from .audit import SiteMemberAuditor, JOIN_SITE, JOIN_SITE_MEMBER
 from .event import GSJoinSiteEvent
 
 
+class SiteAddError(StandardError):
+    '''There was an error adding someone to the site'''
+
+
 def member_added(context, event):
     groupInfo = event.groupInfo
     userInfo = event.memberInfo
@@ -43,4 +47,8 @@ def member_added(context, event):
         acl_users.addGroupsToUser([memberGroupId], userInfo.id)
         auditor.info(JOIN_SITE)
         notify(GSJoinSiteEvent(context, siteInfo, userInfo))
-    assert user_member_of_site(userInfo, siteInfo.siteObj)
+
+    if not user_member_of_site(userInfo, siteInfo.siteObj):
+        m = 'Tried to add {0} ({1}) to the site {2} ({3}) but they are not a member'
+        msg = m.format(userInfo.name, userInfo.id, siteInfo.name, siteInfo.id)
+        raise SiteAddError(msg)
