@@ -66,3 +66,17 @@ class TestAdd(TestCase):
             [b'example_site_member'], b'example_user')
         Mock_SMA().info.assert_called_once_with(JOIN_SITE)
         self.assertEqual(1, mock_notify.call_count)
+
+    @patch('gs.site.member.base.usergroupadd.notify')
+    @patch('gs.site.member.base.usergroupadd.user_member_of_site')
+    @patch('gs.site.member.base.usergroupadd.SiteMemberAuditor')
+    def test_no_group(self, Mock_SMA, mock_umos, mock_notify):
+        'Test when the site user-group does not exist'
+        mock_umos.side_effect = (False, True)
+        mockContext = MagicMock()
+        mock_site_root = mockContext.site_root()
+        mock_acl_users = getattr(mock_site_root, 'acl_users')
+        mock_acl_users.getGroupNames.return_value = [b'not_example_site_member']
+
+        with self.assertRaises(ValueError):
+            member_added(mockContext, self.mockEvent)
