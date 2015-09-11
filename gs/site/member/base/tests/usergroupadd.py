@@ -16,7 +16,7 @@ from __future__ import absolute_import, unicode_literals
 from unittest import TestCase
 from mock import patch, MagicMock
 from gs.site.member.base.usergroupadd import (
-    SiteAddError, member_added, JOIN_SITE_MEMBER, )
+    SiteAddError, member_added, JOIN_SITE_MEMBER, JOIN_SITE)
 
 
 class TestAdd(TestCase):
@@ -48,3 +48,21 @@ class TestAdd(TestCase):
 
         with self.assertRaises(SiteAddError):
             member_added(MagicMock(), self.mockEvent)
+
+    @patch('gs.site.member.base.usergroupadd.notify')
+    @patch('gs.site.member.base.usergroupadd.user_member_of_site')
+    @patch('gs.site.member.base.usergroupadd.SiteMemberAuditor')
+    def test_site_member_add(self, Mock_SMA, mock_umos, mock_notify):
+        'Test adding a member'
+        mock_umos.side_effect = (False, True)
+        mockContext = MagicMock()
+        mock_site_root = mockContext.site_root()
+        mock_acl_users = getattr(mock_site_root, 'acl_users')
+        mock_acl_users.getGroupNames.return_value = [b'example_site_member']
+
+        member_added(mockContext, self.mockEvent)
+
+        mock_acl_users.addGroupsToUser.assert_called_once_with(
+            [b'example_site_member'], b'example_user')
+        Mock_SMA().info.assert_called_once_with(JOIN_SITE)
+        self.assertEqual(1, mock_notify.call_count)
