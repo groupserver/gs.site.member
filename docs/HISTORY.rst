@@ -1,7 +1,13 @@
 Changelog
 =========
 
-3.0.0 (2015-06-xx)
+3.0.1 (2015-09-11)
+------------------
+
+* Turning an ``assert`` into a raised error
+* Adding unit tests
+
+3.0.0 (2015-06-16)
 ------------------
 
 * Renaming the product ``gs.site.member.base``
