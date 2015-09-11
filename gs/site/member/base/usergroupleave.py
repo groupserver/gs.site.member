@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-# Copyright © 2013, 2014 OnlineGroups.net and Contributors.
+# Copyright © 2013, 2014, 2015 OnlineGroups.net and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -23,6 +23,10 @@ from gs.groups.interfaces import IGSGroupsInfo
 from Products.GSGroupMember.groupmembership import member_id
 from .audit import SiteMemberAuditor, LEAVE_SITE, LEAVE_SITE_MEMBER
 from .event import GSLeaveSiteEvent
+
+
+class SiteLeaveError(StandardError):
+    '''There was an error removing someone from the site'''
 
 
 def member_removed(context, event):
@@ -50,7 +54,12 @@ def member_removed(context, event):
         else:
             auditor.info(LEAVE_SITE)
             notify(GSLeaveSiteEvent(context, siteInfo, userInfo))
-        assert not(user_member_of_site(userInfo, siteInfo.siteObj))
+
+        if user_member_of_site(userInfo, siteInfo.siteObj):
+            m = 'Tried to remove {0} ({1}) from {2} ({3}) because they are no longer in any '\
+                'groups, but they are still a member of the site.'
+            msg = m.format(userInfo.name, userInfo.id, siteInfo.name, siteInfo.id)
+            raise SiteLeaveError(msg)
 
 
 def user_member_of_group_on_site(context, userInfo):
