@@ -17,7 +17,6 @@ from logging import getLogger
 SUBSYSTEM = 'gs.site.member'
 log = getLogger(SUBSYSTEM)
 from zope.event import notify
-from gs.core import to_ascii
 from gs.group.member.base.utils import user_member_of_site
 from gs.groups.interfaces import IGSGroupsInfo
 from Products.GSGroupMember.groupmembership import member_id
@@ -47,10 +46,8 @@ def member_removed(context, event):
             acl_users.delGroupsFromUser([memberGroupId], userInfo.id)
         except ValueError as ve:
             m = 'Tried to remove %s (%s) from the site %s (%s) but '\
-                'got a ValueError:\n%s' %\
-                (userInfo.name, userInfo.id, siteInfo.name, memberGroupId, ve)
-            msg = to_ascii(m)
-            log.warning(msg)
+                'got a ValueError:\n%s'
+            log.warning(m, userInfo.name, userInfo.id, siteInfo.name, memberGroupId, ve)
         else:
             auditor.info(LEAVE_SITE)
             notify(GSLeaveSiteEvent(context, siteInfo, userInfo))
